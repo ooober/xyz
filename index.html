@@ -3,31 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Information</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #info {
-            margin-top: 20px;
-        }
-    </style>
+    <title>oober.xyz</title>
+    <link rel="stylesheet" href="haha.css">
 </head>
 <body>
-    <h1>User Information</h1>
+    <body id="main-body">
+  <div id="enter">Enter</div>
     <div id="info">
         <p><strong>IP Address:</strong> <span id="ip"></span></p>
         <p><strong>City:</strong> <span id="city"></span></p>
         <p><strong>Region:</strong> <span id="region"></span></p>
         <p><strong>Country:</strong> <span id="country"></span></p>
         <p><strong>Location (Latitude, Longitude):</strong> <span id="location"></span></p>
+        <p><strong>Organisation:</strong> <span id="org"></span></p>
+        <p><strong>Hostname:</strong> <span id="host"></span></p>
+        <p><strong>Timezone:</strong> <span id="timezone"></span></p>
+        <p style="white-space: normal;"><strong></strong> <span id="useragent"></span></p>
     </div>
 
+    <audio id="audio" src="https://sndup.net/t2cmq/d"></audio>
+
     <script>
+
+        document.getElementById('useragent').innerHTML = "<strong>UserAgent:</strong> " + window.navigator.userAgent;
+
+        document.getElementById('enter').addEventListener('click', function() {
+            this.style.display = 'none';
+            fetchUserInfo();
+        });
+
         async function fetchUserInfo() {
             try {
-                const response = await fetch('https://ipinfo.io/json?token=400d51c6bc0727'); 
+                const response = await fetch('https://ipinfo.io/json?token=400d51c6bc0727');
                 const data = await response.json();
 
                 document.getElementById('ip').textContent = data.ip;
@@ -35,13 +42,28 @@
                 document.getElementById('region').textContent = data.region;
                 document.getElementById('country').textContent = data.country;
                 document.getElementById('location').textContent = data.loc;
+                document.getElementById('org').textContent = data.org;
+                document.getElementById('host').textContent = data.hostname;
+                document.getElementById('timezone').textContent = data.timezone;
+
+                document.getElementById('info').style.display = 'block';
             } catch (error) {
                 console.error('Error fetching user information:', error);
             }
         }
 
-        // Fetch user info on page load
-        fetchUserInfo();
+        document.getElementById('enter').addEventListener('click', function() {
+            this.style.display = 'none';
+            fetchUserInfo();
+            document.getElementById('audio').play();
+        });
+
+        document.getElementById('enter').addEventListener('click', function() {
+            this.style.display = 'none';
+            fetchUserInfo();
+            document.getElementById('audio').play();
+            document.getElementById('main-body').style.backgroundImage = "url('https://i.imgflip.com/8u02hb.mp4')";
+        });
     </script>
 </body>
 </html>
