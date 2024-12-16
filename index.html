@@ -16,29 +16,27 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            background-color: white; /* White background for the main body */
         }
 
-        /* Info section styles (hidden initially) */
-        #info {
+        /* Frosty transparent container styles */
+        #info-container {
             display: none;
             text-align: center;
             color: white;
+            background: rgba(255, 255, 255, 0.8); /* Frosty transparency */
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px); /* Frost effect */
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            opacity: 0; /* Initially hidden opacity for fade-in */
+            transition: opacity 0.5s ease-in-out;
         }
 
-        #info p {
-            overflow: hidden;
-            white-space: nowrap;
-            animation: typing 3s steps(40) 0.5s forwards;
-        }
-
-        @keyframes typing {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-                color: white;
-            }
+        #info-container p {
+            margin: 10px 0;
         }
 
         /* Enter button styles */
@@ -49,25 +47,18 @@
             text-decoration: none;
             padding: 20px 40px;
             border-radius: 10px;
-            background: white; /* White background for the button */
-            background-clip: text;
-            -webkit-background-clip: text;
+            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+            background-size: 300%;
             color: transparent;
             animation: rainbow-text 10s linear infinite; /* Smooth animation */
         }
 
-        /* Super smooth animated rainbow text */
+        /* Smooth animated rainbow text */
         @keyframes rainbow-text {
             0% { background-position: 0% 50%; }
             100% { background-position: 200% 50%; }
         }
 
-        #enter {
-            background-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
-            background-size: 300%;
-        }
-
-        /* Hover glow effect for the button */
         #enter:hover {
             text-shadow: 0 0 10px #fff, 0 0 20px #ff0, 0 0 30px #0ff;
         }
@@ -83,23 +74,20 @@
             z-index: -1;
         }
 
-        /* Default background for "Click to Enter" */
-        #main-body {
-            background-color: white; /* White background */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        /* Smooth fade out effect */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
     </style>
 </head>
 <body id="main-body">
+
     <!-- Click to Enter Button -->
     <div id="enter">Click to Enter</div>
 
-    <!-- Info Display -->
-    <div id="info">
+    <!-- Frosty Transparent Container for Info -->
+    <div id="info-container">
         <p><strong>IP Address:</strong> <span id="ip"></span></p>
         <p><strong>City:</strong> <span id="city"></span></p>
         <p><strong>Region:</strong> <span id="region"></span></p>
@@ -115,15 +103,13 @@
     <video id="background-video" autoplay muted loop></video>
 
     <script>
-        // Event listener for the "Click to Enter" button
+        // Smooth rainbow text animation
         document.getElementById('enter').addEventListener('click', function () {
-            this.style.display = 'none'; // Hide "Click to Enter" button
-            fetchUserInfo(); // Fetch IP info
-            setBackgroundVideo(); // Set the background video and play audio
-            document.getElementById('main-body').style.backgroundColor = "black"; // Change background to black
+            this.classList.add('fade-out'); // Fade out the "Click to Enter" button
+            setTimeout(fetchUserInfo, 1000); // Wait for fade-out to finish and fetch info
         });
 
-        // Function to fetch user IP info
+        // Fetch user info and display in the frosty container
         async function fetchUserInfo() {
             try {
                 const response = await fetch('https://ipinfo.io/json?token=400d51c6bc0727');
@@ -139,17 +125,19 @@
                 document.getElementById('timezone').textContent = data.timezone || "N/A";
                 document.getElementById('useragent').textContent = window.navigator.userAgent;
 
-                document.getElementById('info').style.display = 'block';
+                const infoContainer = document.getElementById('info-container');
+                infoContainer.style.opacity = 1; // Fade-in the info container
+                infoContainer.style.display = 'block';
             } catch (error) {
                 console.error('Error fetching user information:', error);
             }
         }
 
-        // Function to set background video
+        // Function to set the background video
         function setBackgroundVideo() {
             const video = document.getElementById('background-video');
             video.src = "your-video-url.mp4"; // Replace with your video URL
-            video.muted = false; // Allow audio from the video
+            video.muted = false; // Allow video audio
             video.play();
         }
     </script>
