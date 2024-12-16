@@ -4,50 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>oober.xyz</title>
-    <link rel="stylesheet" href="haha.css">
 
-<title>oober.xyz</title>
-<meta name="title" content="oober.xyz" />
-<meta name="description" content="" />
-    
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://oober.xyz/" />
-<meta property="og:title" content="oober.xyz" />
-<meta property="og:description" content="" />
-<meta property="og:image" content="https://i.ibb.co/ZdFTCDq/56-C092-ED-3-FEE-4-F99-8764-0-E197281-D573.png" />
+    <!-- Meta Tags -->
+    <meta name="title" content="oober.xyz" />
+    <meta name="description" content="" />
 
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://oober.xyz/" />
+    <meta property="og:title" content="oober.xyz" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="https://i.ibb.co/ZdFTCDq/56-C092-ED-3-FEE-4-F99-8764-0-E197281-D573.png" />
 
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content="https://oober.xyz/" />
-<meta property="twitter:title" content="oober.xyz" />
-<meta property="twitter:description" content="" />
-<meta property="twitter:image" content="https://i.ibb.co/ZdFTCDq/56-C092-ED-3-FEE-4-F99-8764-0-E197281-D573.png" />
+    <!-- Twitter Cards -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://oober.xyz/" />
+    <meta property="twitter:title" content="oober.xyz" />
+    <meta property="twitter:description" content="" />
+    <meta property="twitter:image" content="https://i.ibb.co/ZdFTCDq/56-C092-ED-3-FEE-4-F99-8764-0-E197281-D573.png" />
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 15px;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #info {
+            display: none;
+            text-align: center;
+        }
+
+        #info p {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3s steps(40) 0.5s forwards;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+                color: white;
+            }
+        }
+
+        #enter {
+            cursor: pointer;
+            font-size: 2em;
+            text-decoration: none;
+            background: white; /* White background for the text */
+            padding: 20px 40px;
+            border-radius: 10px;
+            animation: rainbow-text 2s linear infinite;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        @keyframes rainbow-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #enter:hover {
+            text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #0ff;
+        }
+
+        #background-video {
+            display: none;
+            object-fit: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        @keyframes rainbow-background {
+            0% { background-color: #ff0000; }
+            20% { background-color: #ff8000; }
+            40% { background-color: #ffff00; }
+            60% { background-color: #00ff00; }
+            80% { background-color: #0000ff; }
+            100% { background-color: #8000ff; }
+        }
+    </style>
 </head>
-<body>
-    <body id="main-body">
-  <div id="enter">click to enter</div>
+<body id="main-body">
+    <!-- Click to Enter -->
+    <div id="enter">Click to Enter</div>
+
+    <!-- Info Display -->
     <div id="info">
         <p><strong>IP Address:</strong> <span id="ip"></span></p>
         <p><strong>City:</strong> <span id="city"></span></p>
         <p><strong>Region:</strong> <span id="region"></span></p>
         <p><strong>Country:</strong> <span id="country"></span></p>
-        <p><strong>Location (Latitude, Longitude):</strong> <span id="location"></span></p>
+        <p><strong>Location:</strong> <span id="location"></span></p>
         <p><strong>Organisation:</strong> <span id="org"></span></p>
         <p><strong>Hostname:</strong> <span id="host"></span></p>
         <p><strong>Timezone:</strong> <span id="timezone"></span></p>
-        <p style="white-space: normal;"><strong></strong> <span id="useragent"></span></p>
+        <p><strong>UserAgent:</strong> <span id="useragent"></span></p>
     </div>
 
+    <!-- Background Video -->
+    <video id="background-video" autoplay muted loop></video>
+
+    <!-- Audio -->
     <audio id="audio" src="Merry Go.mp3"></audio>
 
     <script>
-
-        document.getElementById('useragent').innerHTML = "<strong>UserAgent:</strong> " + window.navigator.userAgent;
-
-        document.getElementById('enter').addEventListener('click', function() {
-            this.style.display = 'none';
-            fetchUserInfo();
+        document.getElementById('enter').addEventListener('click', function () {
+            this.style.display = 'none'; // Hide enter button
+            fetchUserInfo(); // Fetch IP info
+            document.getElementById('audio').play(); // Play audio
+            setBackgroundVideo(); // Set background video
         });
 
         async function fetchUserInfo() {
@@ -55,14 +138,15 @@
                 const response = await fetch('https://ipinfo.io/json?token=400d51c6bc0727');
                 const data = await response.json();
 
-                document.getElementById('ip').textContent = data.ip;
-                document.getElementById('city').textContent = data.city;
-                document.getElementById('region').textContent = data.region;
-                document.getElementById('country').textContent = data.country;
-                document.getElementById('location').textContent = data.loc;
-                document.getElementById('org').textContent = data.org;
-                document.getElementById('host').textContent = data.hostname;
-                document.getElementById('timezone').textContent = data.timezone;
+                document.getElementById('ip').textContent = data.ip || "N/A";
+                document.getElementById('city').textContent = data.city || "N/A";
+                document.getElementById('region').textContent = data.region || "N/A";
+                document.getElementById('country').textContent = data.country || "N/A";
+                document.getElementById('location').textContent = data.loc || "N/A";
+                document.getElementById('org').textContent = data.org || "N/A";
+                document.getElementById('host').textContent = data.hostname || "N/A";
+                document.getElementById('timezone').textContent = data.timezone || "N/A";
+                document.getElementById('useragent').textContent = window.navigator.userAgent;
 
                 document.getElementById('info').style.display = 'block';
             } catch (error) {
@@ -70,18 +154,11 @@
             }
         }
 
-        document.getElementById('enter').addEventListener('click', function() {
-            this.style.display = 'none';
-            fetchUserInfo();
-            document.getElementById('audio').play();
-        });
-
-        document.getElementById('enter').addEventListener('click', function() {
-            this.style.display = 'none';
-            fetchUserInfo();
-            document.getElementById('audio').play();
-            document.getElementById('main-body').style.backgroundImage = "url('https://cdn.discordapp.com/attachments/1214253428495360094/1254214383274557552/gBZWaGDb.jpg?ex=6678adab&is=66775c2b&hm=de5624cf5a187376d6f4de1526cff9f0517381b4d1f889133152997aa8ff2ae7&')";
-        });
+        function setBackgroundVideo() {
+            const video = document.getElementById('background-video');
+            video.src = "your-video-url.mp4"; // Replace with your video URL
+            video.style.display = "block";
+        }
     </script>
 </body>
 </html>
