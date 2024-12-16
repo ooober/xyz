@@ -8,11 +8,13 @@
         /* General Styles */
         body {
             margin: 0;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background: black;
+            color: white;
             font-family: Arial, sans-serif;
         }
 
@@ -24,64 +26,77 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1; /* Place behind everything */
+            z-index: -1;
         }
 
-        /* "Click to Enter" Button */
+        /* Click to Enter Screen */
         #enter {
-            font-size: 2em;
-            padding: 20px 40px;
-            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
             cursor: pointer;
+            flex-direction: column;
             text-align: center;
-            background: white;
-            color: transparent;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            animation: rainbow-text 3s linear infinite;
-            transition: opacity 0.5s ease-in-out;
         }
 
-        /* Smooth rainbow animation */
-        @keyframes rainbow-text {
-            0% { background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); }
-            100% { background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet); }
+        #enter h1 {
+            font-size: 3em;
+            margin: 0;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
         }
 
-        #enter {
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        #enter p {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.8);
         }
 
         #enter.fade-out {
             opacity: 0;
             pointer-events: none;
+            transition: opacity 1s ease-in-out;
         }
 
-        /* Frosty Transparent Container */
+        /* Frosty Info Container */
         #info-container {
             display: none;
-            text-align: center;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
             border-radius: 10px;
             backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.8);
-            color: #000;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-            width: 80%;
-            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-align: left;
             position: absolute;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            top: 10%;
+            width: 90%;
+            max-width: 400px;
         }
 
         #info-container.fade-in {
-            display: block;
+            display: flex;
             opacity: 1;
+            animation: fadeIn 1s ease-in-out;
         }
 
         #info-container p {
-            margin: 10px 0;
+            margin: 5px 0;
+            font-size: 1em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -90,14 +105,16 @@
     <!-- Background Video -->
     <video id="background-video" autoplay muted loop playsinline>
         <source src="your-video-url.mp4" type="video/mp4">
-        <!-- Fallback text -->
         Your browser does not support the video tag.
     </video>
 
-    <!-- "Click to Enter" Button -->
-    <div id="enter">Click to Enter</div>
+    <!-- Click to Enter Screen -->
+    <div id="enter">
+        <h1>Click to Enter</h1>
+        <p>Welcome to oober.xyz</p>
+    </div>
 
-    <!-- Frosty Info Container -->
+    <!-- Info Container -->
     <div id="info-container">
         <p><strong>IP Address:</strong> <span id="ip"></span></p>
         <p><strong>City:</strong> <span id="city"></span></p>
@@ -109,17 +126,13 @@
     </div>
 
     <script>
-        // Reference to elements
-        const enterBtn = document.getElementById('enter');
+        const enterScreen = document.getElementById('enter');
         const infoContainer = document.getElementById('info-container');
         const video = document.getElementById('background-video');
 
-        // Click to Enter Button Behavior
-        enterBtn.addEventListener('click', () => {
-            // Fade out button
-            enterBtn.classList.add('fade-out');
-
-            // Wait for fade effect then show info and play video audio
+        // Click to enter functionality
+        enterScreen.addEventListener('click', () => {
+            enterScreen.classList.add('fade-out');
             setTimeout(() => {
                 fetchUserInfo();
                 infoContainer.classList.add('fade-in');
