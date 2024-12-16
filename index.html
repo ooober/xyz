@@ -50,17 +50,21 @@
             padding: 20px 40px;
             border-radius: 10px;
             background: white; /* White background for the button */
-            animation: rainbow-text 3s linear infinite;
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            animation: rainbow-text 10s linear infinite; /* Smooth animation */
         }
 
-        /* Smooth animated rainbow text */
+        /* Super smooth animated rainbow text */
         @keyframes rainbow-text {
-            0% { background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); }
-            50% { background-image: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red); }
-            100% { background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); }
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        #enter {
+            background-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
+            background-size: 300%;
         }
 
         /* Hover glow effect for the button */
@@ -70,7 +74,6 @@
 
         /* Background video styles */
         #background-video {
-            display: none;
             object-fit: cover;
             position: fixed;
             top: 0;
@@ -111,16 +114,12 @@
     <!-- Background Video -->
     <video id="background-video" autoplay muted loop></video>
 
-    <!-- Audio -->
-    <audio id="audio" src="Merry Go.mp3"></audio>
-
     <script>
         // Event listener for the "Click to Enter" button
         document.getElementById('enter').addEventListener('click', function () {
             this.style.display = 'none'; // Hide "Click to Enter" button
             fetchUserInfo(); // Fetch IP info
-            document.getElementById('audio').play(); // Play background audio
-            setBackgroundVideo(); // Set the background video
+            setBackgroundVideo(); // Set the background video and play audio
             document.getElementById('main-body').style.backgroundColor = "black"; // Change background to black
         });
 
@@ -150,7 +149,8 @@
         function setBackgroundVideo() {
             const video = document.getElementById('background-video');
             video.src = "your-video-url.mp4"; // Replace with your video URL
-            video.style.display = "block";
+            video.muted = false; // Allow audio from the video
+            video.play();
         }
     </script>
 </body>
